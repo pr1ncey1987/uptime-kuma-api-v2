@@ -37,7 +37,9 @@ pip3 install "python-socketio[client]" websocket-client pyotp --break-system-pac
 ## Installation
 
 ```bash
-git clone [git@github.com:pr1ncey1987/uptime-kuma-api-v2.git](https://github.com/pr1ncey1987/uptime-kuma-api-v2.git)
+mkdir kuma-bridge
+cd kuma-bridge
+git clone git@github.com:pr1ncey1987/uptime-kuma-api-v2.git
 cd uptime-kuma-bridge
 cp .env.example .env
 # Edit .env with your settings
