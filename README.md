@@ -104,6 +104,45 @@ To run as a background service, use `systemd`, `supervisor`, or `screen`.
 
 ---
 
+## Running with docker compose
+
+```yml
+# Add this service to your existing Uptime Kuma docker-compose.yml
+# The commented out portion should be similar to your current compose file. Simply add the bridge container to it.
+
+#services:
+
+  #uptime-kuma:
+    #image: louislam/uptime-kuma:2
+    #container_name: uptime-kuma
+    #ports:
+    #  - "3001:3001"
+    #volumes:
+    #  - kuma-data:/app/data
+    #restart: unless-stopped
+
+  kuma-bridge:
+    image: christracy/uptime-kuma-api
+    container_name: kuma-bridge
+    restart: unless-stopped
+    ports:
+      - "9911:9911"                 
+    environment:
+      BRIDGE_HOST: "0.0.0.0"
+      BRIDGE_PORT: "9911"
+      BRIDGE_TOKEN: "${BRIDGE_TOKEN}"
+
+      KUMA_URL: "${KUMA_URL}"
+      KUMA_USERNAME: "${KUMA_USERNAME}"
+      KUMA_PASSWORD: "${KUMA_PASSWORD}"
+      KUMA_2FA_SECRET: "${KUMA_2FA_SECRET:-}"
+      KUMA_TIMEOUT: "${KUMA_TIMEOUT:-60}"
+
+#volumes:
+  #kuma-data:
+```
+---
+
 ## Authentication
 
 All requests require a `Bearer` token header if `BRIDGE_TOKEN` is set:
