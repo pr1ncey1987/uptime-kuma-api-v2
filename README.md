@@ -122,8 +122,8 @@ To run as a background service, use `systemd`, `supervisor`, or `screen`.
     #restart: unless-stopped
 
   kuma-bridge:
-    image: kuma-bridge
-    container_name: christracy/kuma-bridge
+    image: christracy/uptime-kuma-api
+    container_name: kuma-bridge
     restart: unless-stopped
     ports:
       - "9911:9911"                 
