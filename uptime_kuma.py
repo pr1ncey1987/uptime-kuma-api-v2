@@ -321,8 +321,24 @@ class KumaClient:
 
     # ---- public API ----
 
+    def _fetch_monitors(self) -> dict:
+    """Actively request the monitor list from Kuma via the getMonitorList socket event."""
+    result = self.sio.call("getMonitorList", timeout=KUMA_TIMEOUT)
+    if isinstance(result, dict) and result.get("ok"):
+        monitors = result.get("monitors") or {}
+    elif isinstance(result, dict) and "ok" not in result:
+        monitors = result
+    else:
+        monitors = {}
+    with self._lock:
+        self._cache["monitorList"] = monitors
+    return monitors
+
     def get_monitors(self) -> dict:
-        return self._wait("monitorList")
+        raw = self._cache.get("monitorList")
+        if not raw:
+            raw = self._fetch_monitors()
+        return raw
 
     def find_monitor_by_url(self, url: str) -> dict | None:
         """Return the first monitor whose url matches (case-insensitive).
